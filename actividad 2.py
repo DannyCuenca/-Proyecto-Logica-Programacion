@@ -51,7 +51,6 @@ def reiniciar():
     marcador.config(text="Victorias: 0  |  Derrotas: 0  |  Empates: 0")
 
 
-# ================= VENTANA PRINCIPAL =================
 ventana = tk.Tk()
 ventana.title("Piedra, Papel o Tijera")
 ventana.geometry("420x320")
