@@ -1,57 +1,104 @@
+import tkinter as tk
 import random
 
+# Opciones del juego
+opciones = ["Piedra", "Papel", "Tijera"]
+
+# Marcadores
 victorias = 0
 derrotas = 0
 empates = 0
 
-while True:
 
-    print("\n=== PIEDRA PAPEL O TIJERA ===")
-    print("1. Piedra")
-    print("2. Papel")
-    print("3. Tijera")
+def jugar(eleccion_jugador):
+    global victorias, derrotas, empates
 
-    jugador = input("Seleccione una opción: ")
+    eleccion_cpu = random.choice(opciones)
 
-    opciones = ["Piedra", "Papel", "Tijera"]
-    computadora = random.choice(opciones)
-
-    if jugador == "1":
-        jugador_eleccion = "Piedra"
-    elif jugador == "2":
-        jugador_eleccion = "Papel"
-    elif jugador == "3":
-        jugador_eleccion = "Tijera"
-    else:
-        print("Opción inválida")
-        continue
-
-    print("Jugador:", jugador_eleccion)
-    print("Computadora:", computadora)
-
-    if jugador_eleccion == computadora:
-        print("Empate")
+    if eleccion_jugador == eleccion_cpu:
+        resultado = "Empate 🤝"
         empates += 1
 
     elif (
-        (jugador_eleccion == "Piedra" and computadora == "Tijera") or
-        (jugador_eleccion == "Papel" and computadora == "Piedra") or
-        (jugador_eleccion == "Tijera" and computadora == "Papel")
+        (eleccion_jugador == "Piedra" and eleccion_cpu == "Tijera") or
+        (eleccion_jugador == "Papel" and eleccion_cpu == "Piedra") or
+        (eleccion_jugador == "Tijera" and eleccion_cpu == "Papel")
     ):
-        print("Ganaste")
+        resultado = "Ganaste 🎉"
         victorias += 1
 
     else:
-        print("Perdiste")
+        resultado = "Perdiste 😢"
         derrotas += 1
 
-    print(f"Victorias: {victorias}")
-    print(f"Derrotas: {derrotas}")
-    print(f"Empates: {empates}")
+    # Actualizar interfaz
+    etiqueta_resultado.config(
+        text=f"Tú: {eleccion_jugador} | CPU: {eleccion_cpu}\n{resultado}"
+    )
 
-    repetir = input("¿Desea jugar otra vez? (s/n): ")
+    marcador.config(
+        text=f"Victorias: {victorias}  |  Derrotas: {derrotas}  |  Empates: {empates}"
+    )
 
-    if repetir.lower() != "s":
-        break
 
-print("Fin del juego")
+def reiniciar():
+    global victorias, derrotas, empates
+    victorias = 0
+    derrotas = 0
+    empates = 0
+
+    etiqueta_resultado.config(text="Elige una opción")
+    marcador.config(text="Victorias: 0  |  Derrotas: 0  |  Empates: 0")
+
+
+# ================= VENTANA PRINCIPAL =================
+ventana = tk.Tk()
+ventana.title("Piedra, Papel o Tijera")
+ventana.geometry("420x320")
+
+# TIULO
+titulo = tk.Label(
+    ventana,
+    text="🎮 Piedra, Papel o Tijera",
+    font=("Arial", 16, "bold")
+)
+titulo.pack(pady=10)
+
+# Botones
+frame = tk.Frame(ventana)
+frame.pack(pady=10)
+
+tk.Button(frame, text="🪨 Piedra", width=12,
+          command=lambda: jugar("Piedra")).grid(row=0, column=0, padx=5)
+
+tk.Button(frame, text="📄 Papel", width=12,
+          command=lambda: jugar("Papel")).grid(row=0, column=1, padx=5)
+
+tk.Button(frame, text="✂ Tijera", width=12,
+          command=lambda: jugar("Tijera")).grid(row=0, column=2, padx=5)
+
+# Resultado
+etiqueta_resultado = tk.Label(
+    ventana,
+    text="Elige una opción",
+    font=("Arial", 12)
+)
+etiqueta_resultado.pack(pady=20)
+
+# Marcador
+marcador = tk.Label(
+    ventana,
+    text="Victorias: 0  |  Derrotas: 0  |  Empates: 0",
+    font=("Arial", 12)
+)
+marcador.pack(pady=10)
+
+# Botón reiniciar
+tk.Button(
+    ventana,
+    text="🔄 Reiniciar",
+    command=reiniciar
+).pack(pady=10)
+
+# Ejecutar
+ventana.mainloop()
